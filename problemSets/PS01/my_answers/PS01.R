@@ -67,7 +67,7 @@ sapply(combined_data, function(x) sum(is.na(x))) #checking that theres no NAs
 
 #Mean vote rates for each EP group
 means_EPG <- combined_data %>%
-  group_by(EPG) %>%
+  group_by(MEPID, EPG) %>%
   summarise(
     n_yes = sum(vote == "Yes", na.rm = TRUE),
     n_no = sum(vote == "No", na.rm = TRUE),
@@ -82,7 +82,7 @@ means_EPG <- combined_data %>%
 #VISUALIZATION
 
 #1
-pdf("Viz_1")
+pdf("Viz_1.pdf")
 ggplot(combined_data, aes(x = NOM_D1, fill = EPG)) +
   geom_histogram(binwidth = 0.1, color = "black", alpha = 0.7) +
   facet_wrap(~EPG, scales = "free_y") +
@@ -97,7 +97,7 @@ ggplot(combined_data, aes(x = NOM_D1, fill = EPG)) +
 dev.off()
 
 #2
-pdf("Viz_2")
+pdf("Viz_2.pdf")
 ggplot(MEP_data, aes(x = NOM_D1, y = NOM_D2, color = EPG)) +
   geom_point() +
   labs(
@@ -109,8 +109,35 @@ ggplot(MEP_data, aes(x = NOM_D1, y = NOM_D2, color = EPG)) +
 dev.off()
 
 #3
+pdf("Viz_3.pdf")
+ggplot(means_EPG, aes(x = EPG, y = mean_yes_rate, color = EPG)) + 
+  geom_boxplot() + 
+  labs(
+    x = "\nEP Group",
+    y = "\nProportion voting Yes",
+    title = "Boxplot of the proportion voting Yes by EP group"
+  ) + 
+  theme_minimal()
+dev.off()
 
 #4
+pdf("Viz_4.pdf")  
+combined_data %>%
+  filter(vote %in% c("Yes","No","Abstain")) %>% 
+  group_by(`National Party`) %>%
+  summarise(mean_yes_rate = mean(vote == "Yes"), .groups = "drop") %>%
+  ggplot(aes(x = reorder(`National Party`, mean_yes_rate),
+             y = mean_yes_rate,
+             fill = `National Party`)) +
+  geom_col(show.legend = FALSE) +
+  coord_flip() +
+  scale_y_continuous(labels = percent_format(accuracy = 1), limits = c(0,1)) +
+  labs(
+    title = "Proportion Voting Yes by National Party (EP1)",
+    x = "\nNational Party",
+    y = "\nProportion voting Yes"
+  ) +
+  theme_minimal() 
+dev.off()
 
-#5
 
