@@ -60,15 +60,16 @@ ggplot(NCSS, aes(x = TRAD12, fill = factor(AVG_INCOME))) +
   scale_fill_manual(
     values = c("0" = "deepskyblue2", "1" = "brown2"),
     labels = c( 
-      "0" = "Below avaerage income",
-      "1" = "Above or average income"
+      "0" = "Below average",
+      "1" = "Average or Above"
       )
     ) +
   facet_wrap(~YEAR) +
   labs(
     x = "TRAD12",
     y = "Proportion of congregations",
-    title = "Proportion of Congregations above and below the Average Income"
+    title = "Proportion of Congregations above and below the Average Income",
+    fill = "Income"
     ) +
   theme(
     plot.title = element_text(hjust = 0.5)
@@ -78,8 +79,8 @@ dev.off()
 #2
 pdf("V2.pdf")
 ggplot(NCSS %>%filter(YEAR == 2022), aes(x = TRAD6, y = NUMOFFMBR , fill = TRAD12)) +
-  geom_col(position = "dodge") +
-  scale_fill_viridis_d() +
+  geom_col(position = "dodge", width = 0.5) +
+  scale_fill_hue() +
   theme(axis.title.x = element_blank(),
         plot.title = element_text(hjust = 0.5)) +
   labs(
@@ -99,6 +100,9 @@ library(ggridges)
 pdf("V3.pdf")
 ggplot(NCSS%>%filter(YEAR == 2022), aes(x = INCOME, y = GDREGION, fill = GDREGION)) + 
   geom_density_ridges(alpha = 0.7, scale = 1.2) +
+  lims(
+    x = c(0, 5000000)
+  ) +
   theme(legend.position = "none") +
   labs(
     x = "Average yearly Income",
