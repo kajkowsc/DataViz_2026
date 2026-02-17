@@ -78,12 +78,14 @@ SAFI <- SAFI |>
 # Categorize household size  #combining multiple verbs w/ pipe operator (|>)
 SAFI <- SAFI |>
   mutate(
-    hh_size_cat = case_when(.      #case_when assigns values according to requirements met 
+    hh_size_cat = case_when(      #case_when assigns values according to requirements met 
       no_membrs <= 3            ~ "small",
       no_membrs >= 4 & no_membrs <= 7 ~ "medium",
       no_membrs > 7             ~ "large"
       )
   )
+
+
 
 # Large households in Ruaca with selected columns 
 ruaca_large_small_df <- SAFI |>
