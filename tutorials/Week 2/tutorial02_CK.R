@@ -25,7 +25,7 @@ pkgTest <- function(pkg){
     }
 
 # Load any necessary packages
-lapply(c("tidyverse", "ggplot2", "ggridges", "tradestatistics", "dplyr"),  pkgTest)
+lapply(c("tidyverse", "ggplot2", "ggridges", "tradestatistics", "dplyr", "showtext"),  pkgTest)
 
 # Set working directory for current folder
 setwd(dirname(rstudioapi::getActiveDocumentContext()$path))

@@ -80,22 +80,48 @@
 The data for this problem set come from the	Canadian Election Study (\href{https://ces-eec.sites.olt.ubc.ca/files/2017/04/CES2015_Combined_Data_Codebook.pdf}{CES})  in 2015. The main purpose of the study is to give a comprehensive picture of the Canadian election: why people vote as they do, what changes during campaigns and across elections, and how Canadian voting compares with that in other democracies.
 
 \subsection*{Data Manipulation}
-
 \begin{enumerate}
 \item Load the CES .csv file from \href{https://raw.githubusercontent.com/ASDS-TCD/DataViz_2026/refs/heads/main/datasets/CES2015.csv}{GitHub} into your global environment. Filter respondents to only include "high quality" participants: 
 \begin{verbatim}
 ces2015 <- ces2015 |> filter(discard == "Good quality")
 \end{verbatim}
 \item Filter the dataset to those participants that answered the question about voting for the past election using \texttt{p\_voted}. Consider respondents who gave a "Yes" answer as having voted, while “No” as not having voted. Treat “Don’t know” and “Refused” as missing.
+\lstinputlisting[language=R, firstline=29, lastline=29]{PS03_DV.R}  
 \item Create an age variable and group into categories (e.g., $<$30, 30-44, 45-64, 65+). Year of birth is in age (four‑digit year).
+\lstinputlisting[language=R, firstline=34, lastline=44]{PS03_DV.R}  
 \end{enumerate}
 
 \subsection*{Data Visualization}
 
 \begin{enumerate}
 	\item Plot turnout rate by age group.
+	\lstinputlisting[language=R, firstline=50, lastline=67]{PS03_DV.R}  
+	\begin{figure}[H]
+		\centering
+		\includegraphics[width=0.7\textwidth]{V1.pdf}
+	\end{figure}
+	\begin{description}
+		\item This visualization shows the percentage out of each age group and shows whether they voted or not. I used the age group categories made in part 3 of the data manipulation section to make this plot. However, this visualization doesn't show the amount of people in each category so the percentages doesn't say much about the population. 
+	\end{description}
 	\item Create a density plot of ideology by party, restricting your sample to respondents with non‑missing left–right self‑placement (0–10 scale) and those that intended to vote for a main party (e.g., Liberal, Conservative, NDP, Bloc in Quebec, and Green).
+	\lstinputlisting[language=R, firstline=70, lastline=90]{PS03_DV.R}  
+	\begin{figure}[H]
+		\centering
+		\includegraphics[width=0.7\textwidth]{V2.pdf}
+	\end{figure}
+	\begin{description}
+		\item This visualization shows the different densities of the 0-10 scale of political ideaologies for each political party. To start this off, I needed to filter the data to how the observations that fall into these parties and if there were NAs to ignore them. Also for the purpose of analysis the self place needed to be numeric to be counted. From there I created the visualization. I made the x scale go from 0-10 to match the values on the questionaire. For a bit of cleaning up, I removed the legend because it served no purpose since each density plot has a title saying which political party it was. 
+	\end{description}
 	\item Produce histogram counts of turnout by income (\texttt{income\_full}), faceted by province.
+	\lstinputlisting[language=R, firstline=97, lastline=123]{PS03_DV.R}  
+		\begin{figure}[H]
+		\centering
+		\includegraphics[width=0.7\textwidth]{V3.pdf}
+	\end{figure}
+	\begin{description}
+		\item To start this visualization, I needed to drop the values that didn't make sense to the question and rename the values so they could be seen easier later on. Next I created the histograms and faceted them to each province. I tilted the x axis for this visualization so the categorical values along the axis could be read legibly. 
+	\end{description}
+	\newpage
 	\item Create your own reusable custom theme. Apply your theme to one of the previous plots and add:
 	\begin{enumerate}
 		\item An improved title summarizing the main substantive takeaway.
@@ -103,6 +129,15 @@ ces2015 <- ces2015 |> filter(discard == "Good quality")
 		\item A caption noting data source, weighting, and key coding decisions.
 		\item At least one direct annotation using \texttt{ggrepel} that calls out a key pattern.
 	\end{enumerate}
+	\lstinputlisting[language=R, firstline=127, lastline=143]{PS03_DV.R}  
+			\lstinputlisting[language=R, firstline=147, lastline=175]{PS03_DV.R}  
+		\begin{figure}[H]
+		\centering
+		\includegraphics[width=0.7\textwidth]{V4.pdf}
+	\end{figure}
+	\begin{description}
+		\item For the visualization above, I added my theme to the second graph to create cleaner density plots. As for the ggrepel annotation I decided to graph the median onto each density plot. I find that this shows the middle of the data set. Also looking at the median, you can see that most graphs' peaks are around their median. The most interesting case is the graph for the Conservative party, since it is the only with the median being higher than 5. Contextually this make sense because we would expect this party to have more right leaning political ideology(5-10). 
+	\end{description}
 
 \end{enumerate}
 

@@ -16,10 +16,7 @@ pkgTest <- function(pkg){
   sapply(pkg,  require,  character.only = TRUE)
 }
 
-library(tidyverse)
-library(stargazer)
-library(tidyr)
-library(dplyr)
+lapply(c("tidyverse", "ggplot2", "ggrepel", "extrafont", "WDI", "ggtext", "showtext"),  pkgTest)
 
 setwd(dirname(rstudioapi::getActiveDocumentContext()$path))
 getwd()
@@ -71,10 +68,11 @@ dev.off()
 
 #2
 unique(ces2015$vote_for)
+table(ces2015$p_selfplace)
 ces2015_party <- ces2015 %>%
+  filter(vote_for %in% c("Liberal", "ndp", "Conservatives", "Green Party", "Bloc Quebecois")) %>%
   filter(!is.na(p_selfplace)) %>%  
-  mutate(p_selfplace = as.numeric(as.character(p_selfplace))) %>%
-  filter(vote_for %in% c("Liberal", "ndp", "Conservatives", "Green Party", "Bloc Quebecois"))
+  mutate(p_selfplace = as.numeric(as.character(p_selfplace)))
 
 pdf("V2.pdf")
 ggplot(ces2015_party, aes(x = p_selfplace, fill = vote_for)) +
@@ -88,13 +86,7 @@ ggplot(ces2015_party, aes(x = p_selfplace, fill = vote_for)) +
   ) +
   theme_minimal() +
   theme(
-    plot.title = element_text(hjust = 0.5, face = "bold", size = 16),
-    panel.grid.major = element_line(color = "lightgray", size = 0.5), 
-    panel.grid.minor = element_line(color = "lightgray", size = 0.25), 
-    panel.border = element_rect(color = "black", fill = NA, size = 0.7),
-    strip.background = element_rect(fill = "white", color = "black", size = 0.7),
-    legend.position = "none"
-  )
+    legend.position = "none") 
 dev.off()
 
 #3
@@ -124,30 +116,68 @@ ggplot(ces2015_clean, aes(x = income_full)) +
     y = "Counts of Turnout by Income\n",
     title = "Counts of Turnout by Income per Province"
   ) +
-  theme_minimal() +
+  theme_minimal() + 
   theme(
-    axis.text.x = element_text(angle = 45, hjust = 1),
-    plot.title = element_text(hjust = 0.5, face = "bold", size = 15),
-    panel.grid.major = element_line(color = "lightgray", size = 0.5), 
-    panel.grid.minor = element_line(color = "lightgray", size = 0.25), 
-    panel.border = element_rect(color = "black", fill = NA, size = 0.7),
-    strip.background = element_rect(fill = "white", color = "black", size = 0.7)
-    )
+    axis.text.x = element_text(angle = 45, hjust = 1)
+  )
 dev.off()
 
+
 #4
-caroline_theme <- theme_minimal(base_family = "Roboto Condensed", base_size = 12) +
-  theme(panel.grid.minor = element_blank(),
-        plot.title = element_text(face = "bold", size = rel(1.7)),
-        plot.subtitle = element_text(face = "plain", size = rel(1.3), color = "grey70"),
-        plot.caption = element_text(face = "italic", size = rel(0.7), 
-                                    color = "grey70", hjust = 0),
+caroline_theme <- function(base_size = 12) {
+  theme_minimal(base_family = "sans", base_size = 12) +
+  theme(
+    plot.title = element_text(hjust = 0.5, face = "bold", size = 15),
+        plot.subtitle = element_text(hjust = 0.5, face = "plain", size = 12),
+        plot.caption = element_text(hjust = 0.5, face = "italic", size = 8, color = "grey70"),
         legend.title = element_text(face = "bold"),
         strip.text = element_text(face = "bold", size = rel(1.1), hjust = 0),
-        axis.title = element_text(face = "bold"),
-        axis.title.x = element_text(margin = margin(t = 10), hjust = 0),
-        axis.title.y = element_text(margin = margin(r = 10), hjust = 1),
-        strip.background = element_rect(fill = "grey90", color = NA),
-        panel.border = element_rect(color = "grey90", fill = NA))
+        axis.title = element_text(hjust = 0.5, face = "bold"),
+        axis.title.x = element_text(margin = margin(t = 10), hjust = 0.5),
+        axis.title.y = element_text(margin = margin(r = 10), hjust = 0.5),
+        panel.grid.major = element_line(color = "lightgray", size = 0.5),
+        panel.grid.minor = element_line(color = "lightgray", size = 0.25),
+        panel.border = element_rect(color = "black", fill = NA, size = 0.7),
+        panel.background = element_rect(fill = "white", color = NA),
+        strip.background = element_rect(fill = "white", color = "black", size = 0.7))
+}
+
+#5
+library(ggrepel)
+medians <- ces2015_party %>%
+  group_by(vote_for) %>%
+  summarise(median_selfplace = median(p_selfplace, na.rm = TRUE))
+
+pdf("V4.pdf")
+ggplot(ces2015_party, aes(x = p_selfplace, fill = vote_for)) +
+  geom_density(alpha = 0.5) +
+  facet_wrap(~vote_for, ncol = 2) +
+  scale_x_continuous(limits = c(0,10), breaks = 0:10) +
+  labs(
+    title = "Left–Right Self-Placement by Party",
+    subtitle = "The 5 Major Political Party's densities on left to right political scale (0-10)",
+    caption = "Data from the Canadian Election Study (CES) in 2015\n1275 observations that stated 1 out of the 5 political parties shown. ",
+    x = "Left–right self-placement (0–10 scale)",
+    y = "Density"
+  ) +
+ caroline_theme() +
+  theme(
+    legend.position = "none") +
+  geom_vline(data = medians, 
+             aes(xintercept = median_selfplace),
+             color = "red", 
+             linetype = "dashed") +
+  geom_text_repel(data = medians,
+                  aes(x = median_selfplace, y = 0.05, label = "Median"),
+                  inherit.aes = FALSE,
+                  nudge_y = 0.02,
+                  color = "red")
+dev.off()
 
 
+
+
+
+
+
+ 
