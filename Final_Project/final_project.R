@@ -147,7 +147,6 @@ leadership_2 <- leadership_2 %>%
   )
 
 #pivioting the data to be long so we can look at all the education levels per gender
-leadership_2$amount_exect
 leadership_long <- leadership_2 %>%
   pivot_longer(
     cols = c(amount_exect, amount_polit),
@@ -182,3 +181,4 @@ ggplot(leadership_long,
                                 color = "grey70", hjust = 0.5)
   )
 dev.off()
+

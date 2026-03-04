@@ -68,10 +68,12 @@
 	
 \subsection*{Data Story and Manipulation}
 \begin{description}
-	\item[The Data] description
+	\item This data comes from the American Trends Panel (ATP) that was created by the Pew Research Center. It consists of a panel of randomly selected U.S. adults that participate through web surveys. This particular survey is focused on gender and politics. Most of the questions are centered around the survey responder's opinions on the balance and authority of women and men in high ranking positions. 
 \end{description}
 	\lstinputlisting[language=R, firstline=24, lastline=51]{final_project.R}  
-
+\begin{description}
+	\item For the data manipulation, I decided to take a couple of the questions that I thought would make interesting variables. However, not all of the questions selected ended up used in this project. Since my real goal was looking at the differences between male and female, I made sure there was a clear distinction in the data for gender. I did, however, remove the NAs from this since it wasn't productive to my analysis. 
+\end{description}
 \subsection*{Data Visualization}
 \title{Visualization 1}
 	\lstinputlisting[language=R, firstline=55, lastline=85]{final_project.R}  
@@ -79,6 +81,9 @@
 		\centering
 		\includegraphics[width=0.9\textwidth]{bar.pdf}
 	\end{figure}
+	\begin{description}
+		\item The first visualization is bar graph was produced to show the difference in opinion on how many women are in high political offices between male and female. This graph shows that out of these respondants the female answers tend to be more critical of the current amount of women in office. Less thought there were too many, more thought they were too few, and less thought it was just right in comparison to their male counterpart. Meanwhile, the males were more content with the amount with their too few being high but not higher than female opinions and just right being equally as high. 
+	\end{description}
 
 
 \title{Visualization 2}
@@ -87,6 +92,9 @@
 	\centering
 	\includegraphics[width=0.9\textwidth]{heat.pdf}
 \end{figure}
+\begin{description}
+	\item The second visualization is a heat graph showing the respondants' opinions on the different levels of respect for a female president in the U.S. categorized by age and gender. The thing that stands out the most is the highest percentages on both the male and female heat graph is the age 60 plus saying "neither more or less respected". Meanwhile, the two graphs are pretty similar on opinions with slight variation  between the genders. The lowest percentages across the age categories and gender are the extremes of "a lot less respected" and "a lot more respected". This shows that the respondants had less extreme opinions on the matter and that they tend to be neutral or slightly leaning towards one of the two sides. 
+\end{description}
 
 \title{Visualization 3}
 \lstinputlisting[language=R, firstline=136, lastline=184]{final_project.R}  
@@ -94,4 +102,7 @@
 	\centering
 	\includegraphics[width=0.9\textwidth]{bar_2.pdf}
 \end{figure}
+\begin{description}
+	\item The last visualization is another bar graph that looks at the average responses for amount of women in top exective business positions and high political offices based on gender and education level. With 1 for both of these questions meaning there are too many women in these positions, 2 being too little, and 3 being just right. For the most part these averages are pretty similar between the gender and the two graphs. The one point that sticks out are the female highschool grads who have a high average when it comes to women in polical office. With how these answers were coded, it seems that a lot of respondants think that there are either just the right amount or too little women in high political offices. Also, it could be that a lot of the women who filled out this survey were high school grads. Another interesting point is the postgrad males for both questions have high averages as well. This could be because more men with post graduate degrees answered this survey or they  think that there are enough or more needed women in these positions.
+\end{description}
 \end{document}
